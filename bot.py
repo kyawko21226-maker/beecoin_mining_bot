@@ -36,8 +36,14 @@ def run_bot():
     bot.infinity_polling()
 
 
+# ===== KEEP ALIVE =====
 def keep_alive():
-    Thread(target=run).start()
+    Thread(target=run_bot).start()
+
+# ===== MAIN =====
+if __name__ == "__main__":
+    keep_alive()
+    app.run(host="0.0.0.0", port=8080)
 
 TOKEN = os.getenv("BOT_TOKEN")
 
