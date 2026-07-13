@@ -30,13 +30,11 @@ def mine(message):
 
     earn = round(random.uniform(0.01, 0.05), 3)
     user["coin"] += earn
-    bot.reply_to(message, f"⛏ You mined {earn} BEE!")
+    bot.reply_to(message, f"⛏ You mined {earn}")
 
 def run_bot():
     bot.infinity_polling()
 
-def run():
-    app.run(host="0.0.0.0", port=int(os.environ.get("PORT
 
 def keep_alive():
     Thread(target=run).start()
