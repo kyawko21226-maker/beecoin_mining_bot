@@ -1,12 +1,8 @@
 import telebot
-import random
-import time
 import os
 from flask import Flask
 from threading import Thread
-
-TOKEN = "8725569296:AAGAiZvDpvzgJkO-0El7R37RxYDHrboddX0"
-bot = telebot.TeleBot(TOKEN)
+import random
 
 app = Flask(__name__)
 
@@ -14,38 +10,46 @@ app = Flask(__name__)
 def home():
     return "Bot is alive!"
 
+# ✅ TOKEN ကိုအပေါ်မှာထား
+TOKEN = os.getenv("BOT_TOKEN")
+
+if not TOKEN:
+    raise ValueError("BOT_TOKEN not set")
+
+bot = telebot.TeleBot(TOKEN)
+
 users = {}
 
 @bot.message_handler(commands=['start'])
 def start(message):
     users[message.chat.id] = {"coin": 0}
-    bot.reply_to(message, "🚀 Welcome to BeeCoin Bot!\nUse /mine")
+    bot.reply_to(message, "🚀 Welcome!")
 
 @bot.message_handler(commands=['mine'])
 def mine(message):
     user = users.get(message.chat.id)
+
     if not user:
         bot.reply_to(message, "Type /start first")
         return
 
     earn = round(random.uniform(0.01, 0.05), 3)
     user["coin"] += earn
-    bot.reply_to(message, f"⛏ You mined {earn}")
 
+    bot.reply_to(message, f"⛏ You mined {earn} coins")
+
+# ✅ BOT RUN
 def run_bot():
     bot.infinity_polling()
 
-
-# ===== KEEP ALIVE =====
+# ✅ KEEP ALIVE
 def keep_alive():
     Thread(target=run_bot).start()
 
-# ===== MAIN =====
+# ✅ MAIN
 if __name__ == "__main__":
     keep_alive()
     app.run(host="0.0.0.0", port=8080)
-
-TOKEN = os.getenv("BOT_TOKEN")
 
 if not TOKEN:
     raise ValueError("BOT_TOKEN environment variable not found.")
