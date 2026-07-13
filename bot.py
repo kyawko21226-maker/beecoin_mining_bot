@@ -1,4 +1,7 @@
 import telebot
+import random
+import time
+
 from telebot import types
 import time
 import os
